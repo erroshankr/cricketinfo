@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Player</title>
+</head>
+<body>
+
+<h2>Create Player</h2>
+
+<form th:action="@{/app/create/player}" th:object="${player}" method="post">
+
+    Name: <input type="text" th:field="*{playerName}" required/><br><br>
+    Team: <input type="text" th:field="*{teamName}" required/><br><br>
+    Age: <input type="number" th:field="*{age}" required/><br><br>
+    Jersey No: <input type="text" th:field="*{jerseyNum}" required/><br><br>
+
+    Gender:
+    <select th:field="*{gender}">
+        <option th:value="MALE">MALE</option>
+        <option th:value="FEMALE">FEMALE</option>
+    </select>
+    <br><br>
+
+    Centuries: <input type="number" th:field="*{centuries}"/><br><br>
+    Half-Centuries: <input type="number" th:field="*{halfCenturies}"/><br><br>
+    Total Runs: <input type="number" th:field="*{totalRuns}"/><br><br>
+    Average: <input type="number" step="0.01" th:field="*{average}"/><br><br>
+
+    <button type="submit">Save Player</button>
+</form>
+
+<br>
+<a href="/">Back to Home</a>
+
+</body>
+</html>
