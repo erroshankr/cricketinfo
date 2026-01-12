@@ -2,35 +2,140 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Create Player</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #1e8449;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .back-link a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Create Player</h2>
+<div class="container">
 
-<form th:action="@{/app/create/player}" th:object="${player}" method="post">
+    <h2>Create Player</h2>
 
-    Name: <input type="text" th:field="*{playerName}" required/><br><br>
-    Team: <input type="text" th:field="*{teamName}" required/><br><br>
-    Age: <input type="number" th:field="*{age}" required/><br><br>
-    Jersey No: <input type="text" th:field="*{jerseyNum}" required/><br><br>
+    <form th:action="@{/app/update/player}"
+          th:object="${player}"
+          method="put">
 
-    Gender:
-    <select th:field="*{gender}">
-        <option th:value="MALE">MALE</option>
-        <option th:value="FEMALE">FEMALE</option>
-    </select>
-    <br><br>
+        <div class="form-row">
+            <label>Player Name</label>
+            <input type="text" th:field="*{playerName}" required>
+        </div>
 
-    Centuries: <input type="number" th:field="*{centuries}"/><br><br>
-    Half-Centuries: <input type="number" th:field="*{halfCenturies}"/><br><br>
-    Total Runs: <input type="number" th:field="*{totalRuns}"/><br><br>
-    Average: <input type="number" step="0.01" th:field="*{average}"/><br><br>
+        <div class="form-row">
+            <label>Team Name</label>
+            <input type="text" th:field="*{teamName}" required>
+        </div>
 
-    <button type="submit">Save Player</button>
-</form>
+        <div class="form-row">
+            <label>Jersey Number</label>
+            <input type="text" th:field="*{jerseyNum}">
+        </div>
 
-<br>
-<a href="/">Back to Home</a>
+        <div class="form-row">
+            <label>Age</label>
+            <input type="number" th:field="*{age}">
+        </div>
+
+        <div class="form-row">
+            <label>Gender</label>
+            <select th:field="*{gender}">
+                <option value="">Select Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Centuries</label>
+            <input type="number" th:field="*{centuries}">
+        </div>
+
+        <div class="form-row">
+            <label>Half-Centuries</label>
+            <input type="number" th:field="*{halfCenturies}">
+        </div>
+
+        <div class="form-row">
+            <label>Total Runs</label>
+            <input type="number" th:field="*{totalRuns}">
+        </div>
+
+        <div class="form-row">
+            <label>Average</label>
+            <input type="number" step="0.01" th:field="*{average}">
+        </div>
+
+        <button type="submit">Save Player</button>
+    </form>
+
+</div>
 
 </body>
 </html>

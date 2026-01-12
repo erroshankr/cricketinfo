@@ -1,28 +1,52 @@
 package com.cricket.info.models;
 
 import com.cricket.info.enums.Gender;
+import jakarta.persistence.*;
 
+@Entity  // This class is mapped to a table in database -> ORM -> Object Relational Mapping
+@Table(name = "players")
 public class PlayerModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long playerId;
+    @Column(name = "name")
     private String playerName;
+    @Column(name = "team")
     private String teamName;
     private String jerseyNum;
-    private int centuries;
-    private int halfCenturies;
-    private int age;
+    private Integer centuries;
+    private Integer halfCenturies;
+    private Integer age;
     private Gender gender;
-    private int totalRuns;
-    private double average;
+    private Integer totalRuns;
+    private Double average;
 
     public PlayerModel() {
     }
 
-    public PlayerModel(String playerName, String teamName, int age, Gender gender, String jerseyNum) {
-        this.playerName = playerName;
-        this.teamName = teamName;
-        this.age = age;
-        this.gender = gender;
-        this.jerseyNum = jerseyNum;
+    @Override
+    public String toString() {
+        return "PlayerModel{" +
+                "playerId=" + playerId +
+                ", playerName='" + playerName + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", jerseyNum='" + jerseyNum + '\'' +
+                ", centuries=" + centuries +
+                ", halfCenturies=" + halfCenturies +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", totalRuns=" + totalRuns +
+                ", average=" + average +
+                '}';
+    }
+
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
     }
 
     public String getPlayerName() {
@@ -41,7 +65,6 @@ public class PlayerModel {
         this.teamName = teamName;
     }
 
-
     public String getJerseyNum() {
         return jerseyNum;
     }
@@ -50,28 +73,27 @@ public class PlayerModel {
         this.jerseyNum = jerseyNum;
     }
 
-
-    public int getCenturies() {
+    public Integer getCenturies() {
         return centuries;
     }
 
-    public void setCenturies(int centuries) {
+    public void setCenturies(Integer centuries) {
         this.centuries = centuries;
     }
 
-    public int getHalfCenturies() {
+    public Integer getHalfCenturies() {
         return halfCenturies;
     }
 
-    public void setHalfCenturies(int halfCenturies) {
+    public void setHalfCenturies(Integer halfCenturies) {
         this.halfCenturies = halfCenturies;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -83,34 +105,19 @@ public class PlayerModel {
         this.gender = gender;
     }
 
-    public int getTotalRuns() {
+    public Integer getTotalRuns() {
         return totalRuns;
     }
 
-    public void setTotalRuns(int totalRuns) {
+    public void setTotalRuns(Integer totalRuns) {
         this.totalRuns = totalRuns;
     }
 
-    public double getAverage() {
+    public Double getAverage() {
         return average;
     }
 
-    public void setAverage(double average) {
+    public void setAverage(Double average) {
         this.average = average;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerModel{" +
-                "playerName='" + playerName + '\'' +
-                ", teamName='" + teamName + '\'' +
-                ", jerseyNum='" + jerseyNum + '\'' +
-                ", centuries=" + centuries +
-                ", halfCenturies=" + halfCenturies +
-                ", age=" + age +
-                ", gender=" + gender +
-                ", totalRuns=" + totalRuns +
-                ", average=" + average +
-                '}';
     }
 }

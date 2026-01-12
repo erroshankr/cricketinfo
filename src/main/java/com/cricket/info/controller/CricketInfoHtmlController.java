@@ -1,26 +1,27 @@
 package com.cricket.info.controller;
 
 import com.cricket.info.models.PlayerModel;
+import com.cricket.info.repo.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/app")
 public class CricketInfoHtmlController {
 
+    @Autowired
+    private PlayerRepository playerRepo;
+
     Map<String, PlayerModel> playerModelMap = new HashMap<>();
 
     @GetMapping("/")
-    public String displayAppName(){
+    public String displayAppName(Model model){
+        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll();
+        model.addAttribute("players", list);
         return "home";  // src/main/resource/home.html
     }
 
@@ -33,21 +34,60 @@ public class CricketInfoHtmlController {
 
 
     @PostMapping("/create/player")
-    public String createPlayer(@ModelAttribute PlayerModel p){
-        System.out.println("Inside createPlayer method of CricketInfoJsonController");
-        playerModelMap.put(p.getPlayerName(), p);
+    public String createPlayer(@ModelAttribute PlayerModel p, Model model){
+        playerRepo.save(p); // db insert into players table, returns void
+        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll(); // returns all rows of players table as objects
+        model.addAttribute("players", list);
         return "home";
+    }
+
+    @PutMapping("/update/player")
+    public String updatePlayer(@ModelAttribute PlayerModel p, Model model){
+        Optional<PlayerModel> p1 =playerRepo.findById(p.getPlayerId());
+        if(p1.isEmpty()){
+            return "home";
+        }
+        PlayerModel p2 = p1.get();
+        p2.setPlayerName(p.getPlayerName());
+        p2.setAge(p.getAge());
+        p2.setTeamName(p.getTeamName());
+        p2.setAverage(p.getAverage());
+        p2.setTotalRuns(p.getTotalRuns());
+        p2.setCenturies(p.getCenturies());
+        p2.setHalfCenturies(p.getHalfCenturies());
+        p2.setGender(p.getGender());
+        p2.setJerseyNum(p.getJerseyNum());
+        playerRepo.save(p2); // db insert into players table, returns void
+        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll(); // returns all rows of players table as objects
+        model.addAttribute("players", list);
+        return "home";
+
+
+
+    }
+
+    @GetMapping("/player/edit/{id}")
+    public String getPlayerById(@PathVariable Long id, Model model){
+      Optional<PlayerModel> opt = playerRepo.findById(id);
+      if(opt.isEmpty()){
+          List<PlayerModel> li = (List<PlayerModel>) playerRepo.findAll();
+          model.addAttribute("players", li);
+          return "home";
+      }
+      PlayerModel p = opt.get();
+      model.addAttribute("player", p);
+      return "player-form";
     }
 
     @GetMapping("/list/players")
     public String fetchPlayers(Model model){
-        System.out.println("Inside createPlayer method of CricketInfoJsonController");
         List<PlayerModel> list = new ArrayList<>();
+        System.out.println("Inside createPlayer method of CricketInfoJsonController");
         for (Map.Entry<String, PlayerModel> entry : playerModelMap.entrySet()) {
             list.add(entry.getValue());
         }
         model.addAttribute("players", list);
-        return "player-list";
+        return "home";
     }
 }
 
@@ -75,3 +115,9 @@ public class CricketInfoHtmlController {
 // @RestController : it returns same value as it is that we send
 // View Resolver:
 // on every button click, end point is called
+// right click -? inspect -> network -> call -> headers --? URL & MethodType -> response -> mapping of object in html
+// spring --> start--> spring container -->
+// <bean id="cricketInfoHtmlController" class ="com.cricket.info.controller.CricketInfoHtmlController" scope="singleton"/>
+// <bean id="playerModel" class="com.cricket.info.models.PlayerModel" scope="prototype">
+//       <property name="playerName" value="Sachin Tendulkar"/>
+//   </bean>
