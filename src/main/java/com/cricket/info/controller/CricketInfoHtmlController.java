@@ -33,36 +33,30 @@ public class CricketInfoHtmlController {
     }
 
 
-    @PostMapping("/create/player")
-    public String createPlayer(@ModelAttribute PlayerModel p, Model model){
-        playerRepo.save(p); // db insert into players table, returns void
-        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll(); // returns all rows of players table as objects
-        model.addAttribute("players", list);
-        return "home";
-    }
-
-    @PutMapping("/update/player")
-    public String updatePlayer(@ModelAttribute PlayerModel p, Model model){
-        Optional<PlayerModel> p1 =playerRepo.findById(p.getPlayerId());
-        if(p1.isEmpty()){
-            return "home";
+    @PostMapping("/save/player")
+    public String savePlayer(@ModelAttribute PlayerModel p, Model model){
+        if(p.getPlayerId() == null){
+            // create
+            playerRepo.save(p); // db insert into players table, returns void
+        }else{
+           Optional<PlayerModel> opt =  playerRepo.findById(p.getPlayerId());
+           if(opt.isPresent()){
+               PlayerModel p2 = opt.get();
+               p2.setPlayerName(p.getPlayerName());
+               p2.setAge(p.getAge());
+               p2.setTeamName(p.getTeamName());
+               p2.setAverage(p.getAverage());
+               p2.setTotalRuns(p.getTotalRuns());
+               p2.setCenturies(p.getCenturies());
+               p2.setHalfCenturies(p.getHalfCenturies());
+               p2.setGender(p.getGender());
+               p2.setJerseyNum(p.getJerseyNum());
+               playerRepo.save(p2);
+           }
         }
-        PlayerModel p2 = p1.get();
-        p2.setPlayerName(p.getPlayerName());
-        p2.setAge(p.getAge());
-        p2.setTeamName(p.getTeamName());
-        p2.setAverage(p.getAverage());
-        p2.setTotalRuns(p.getTotalRuns());
-        p2.setCenturies(p.getCenturies());
-        p2.setHalfCenturies(p.getHalfCenturies());
-        p2.setGender(p.getGender());
-        p2.setJerseyNum(p.getJerseyNum());
-        playerRepo.save(p2); // db insert into players table, returns void
-        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll(); // returns all rows of players table as objects
+        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll();
         model.addAttribute("players", list);
         return "home";
-
-
 
     }
 

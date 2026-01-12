@@ -79,9 +79,12 @@
 
     <h2>Create Player</h2>
 
-    <form th:action="@{/app/update/player}"
+    <form th:action="@{/app/save/player}"
           th:object="${player}"
-          method="put">
+          method="post">
+
+        <!-- Hidden field for Update -->
+        <input type="hidden" th:field="*{playerId}" />
 
         <div class="form-row">
             <label>Player Name</label>
@@ -132,8 +135,12 @@
             <input type="number" step="0.01" th:field="*{average}">
         </div>
 
-        <button type="submit">Save Player</button>
+        <button type="submit"
+                th:text="${player.playerId} == null ? 'Save Player' : 'Update Player'">
+        </button>
+
     </form>
+
 
 </div>
 
