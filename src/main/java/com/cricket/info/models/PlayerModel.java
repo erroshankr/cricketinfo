@@ -21,6 +21,7 @@ public class PlayerModel {
     private Gender gender;
     private Integer totalRuns;
     private Double average;
+    private int totalMatches;
 
     public PlayerModel() {
     }
@@ -31,6 +32,7 @@ public class PlayerModel {
                 "playerId=" + playerId +
                 ", playerName='" + playerName + '\'' +
                 ", teamName='" + teamName + '\'' +
+                ", totalMatches='" + totalMatches + '\'' +
                 ", jerseyNum='" + jerseyNum + '\'' +
                 ", centuries=" + centuries +
                 ", halfCenturies=" + halfCenturies +
@@ -39,6 +41,14 @@ public class PlayerModel {
                 ", totalRuns=" + totalRuns +
                 ", average=" + average +
                 '}';
+    }
+
+    public int getTotalMatches() {
+        return totalMatches;
+    }
+
+    public void setTotalMatches(int totalMatches) {
+        this.totalMatches = totalMatches;
     }
 
     public Long getPlayerId() {

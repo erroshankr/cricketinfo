@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/app")
-public class CricketInfoHtmlController {
+public class PlayerController {
 
     @Autowired
     private PlayerRepository playerRepo;
@@ -20,9 +23,7 @@ public class CricketInfoHtmlController {
 
     @GetMapping("/")
     public String displayAppName(Model model){
-        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll();
-        model.addAttribute("players", list);
-        return "home";  // src/main/resource/home.html
+        return "redirect:/list/players";
     }
 
 
@@ -34,10 +35,12 @@ public class CricketInfoHtmlController {
 
 
     @PostMapping("/save/player")
-    public String savePlayer(@ModelAttribute PlayerModel p, Model model){
+    public String savePlayer(@ModelAttribute PlayerModel p, RedirectAttributes model){
         if(p.getPlayerId() == null){
             // create
+            p.setAverage((double) (p.getTotalRuns()/p.getTotalMatches()));
             playerRepo.save(p); // db insert into players table, returns void
+            model.addAttribute("success", "Player created successfully");
         }else{
            Optional<PlayerModel> opt =  playerRepo.findById(p.getPlayerId());
            if(opt.isPresent()){
@@ -45,18 +48,18 @@ public class CricketInfoHtmlController {
                p2.setPlayerName(p.getPlayerName());
                p2.setAge(p.getAge());
                p2.setTeamName(p.getTeamName());
-               p2.setAverage(p.getAverage());
+               p2.setTotalMatches(p.getTotalMatches());
+               p2.setAverage((double) (p.getTotalRuns()/p.getTotalMatches()));
                p2.setTotalRuns(p.getTotalRuns());
                p2.setCenturies(p.getCenturies());
                p2.setHalfCenturies(p.getHalfCenturies());
                p2.setGender(p.getGender());
                p2.setJerseyNum(p.getJerseyNum());
                playerRepo.save(p2);
+               model.addAttribute("success", "Player updated successfully");
            }
         }
-        List<PlayerModel> list = (List<PlayerModel>) playerRepo.findAll();
-        model.addAttribute("players", list);
-        return "home";
+        return "redirect:/list/players";
 
     }
 
@@ -66,23 +69,41 @@ public class CricketInfoHtmlController {
       if(opt.isEmpty()){
           List<PlayerModel> li = (List<PlayerModel>) playerRepo.findAll();
           model.addAttribute("players", li);
+          model.addAttribute("error", "No player found for with given ID: " + id);
           return "home";
       }
       PlayerModel p = opt.get();
       model.addAttribute("player", p);
+      model.addAttribute("success", "Player found");
       return "player-form";
     }
 
     @GetMapping("/list/players")
     public String fetchPlayers(Model model){
-        List<PlayerModel> list = new ArrayList<>();
-        System.out.println("Inside createPlayer method of CricketInfoJsonController");
-        for (Map.Entry<String, PlayerModel> entry : playerModelMap.entrySet()) {
-            list.add(entry.getValue());
+        List<PlayerModel> players = (List<PlayerModel>) playerRepo.findAll();
+        if(players.isEmpty()){
+            model.addAttribute("error", "No players found");
+        }else{
+            model.addAttribute("success", players.size() + " Players found");
         }
-        model.addAttribute("players", list);
+        model.addAttribute("players", players);
         return "home";
     }
+
+    @DeleteMapping("/player/delete/{id}")
+    public String removePlayerById(@PathVariable Long id, RedirectAttributes model){
+        Optional<PlayerModel> opt = playerRepo.findById(id);
+        if(opt.isPresent()) {
+            playerRepo.deleteById(id);
+            model.addFlashAttribute("success", "Player deleted successfully");
+        }else{
+            model.addFlashAttribute("error", "Player not found for deletion");
+        }
+
+        return "redirect:/list/players";
+
+    }
+
 }
 
 
@@ -115,3 +136,9 @@ public class CricketInfoHtmlController {
 // <bean id="playerModel" class="com.cricket.info.models.PlayerModel" scope="prototype">
 //       <property name="playerName" value="Sachin Tendulkar"/>
 //   </bean>
+
+// GET -> GetByID(ID required) & GET All (nothing to be sent to backend from UI) :
+// DELETE -> DeleteById --> only unique keys are enough
+// POST -> Create/Update --> full form data
+
+// @ModelAttribute -> used to handle form data mapping with java object

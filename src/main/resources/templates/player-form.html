@@ -79,7 +79,7 @@
 
     <h2>Create Player</h2>
 
-    <form th:action="@{/app/save/player}"
+    <form th:action="@{/save/player}"
           th:object="${player}"
           method="post">
 
@@ -94,6 +94,11 @@
         <div class="form-row">
             <label>Team Name</label>
             <input type="text" th:field="*{teamName}" required>
+        </div>
+
+        <div class="form-row">
+            <label>Matches</label>
+            <input type="number" th:field="*{totalMatches}">
         </div>
 
         <div class="form-row">
@@ -128,11 +133,6 @@
         <div class="form-row">
             <label>Total Runs</label>
             <input type="number" th:field="*{totalRuns}">
-        </div>
-
-        <div class="form-row">
-            <label>Average</label>
-            <input type="number" step="0.01" th:field="*{average}">
         </div>
 
         <button type="submit"
