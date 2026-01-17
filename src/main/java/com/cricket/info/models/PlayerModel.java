@@ -1,20 +1,24 @@
 package com.cricket.info.models;
 
 import com.cricket.info.enums.Gender;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity  // This class is mapped to a table in database -> ORM -> Object Relational Mapping
 @Table(name = "players")
-public class PlayerModel {
+public class PlayerModel extends BaseModel{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long playerId;
+    // SELECT * from players INNER JOIN team on player.team = team.id where team.id = 1;
+
     @Column(name = "name")
     private String playerName;
-    @Column(name = "team")
-    private String teamName;
-    private String jerseyNum;
+
+
+    @ManyToOne
+    private TeamModel team; // foreign key
+
     private Integer centuries;
     private Integer halfCenturies;
     private Integer age;
@@ -22,6 +26,7 @@ public class PlayerModel {
     private Integer totalRuns;
     private Double average;
     private int totalMatches;
+    private boolean isCaptain;
 
     public PlayerModel() {
     }
@@ -29,34 +34,18 @@ public class PlayerModel {
     @Override
     public String toString() {
         return "PlayerModel{" +
-                "playerId=" + playerId +
+                "playerId=" + getId() +
                 ", playerName='" + playerName + '\'' +
-                ", teamName='" + teamName + '\'' +
+                ", teamName='" + team + '\'' +
                 ", totalMatches='" + totalMatches + '\'' +
-                ", jerseyNum='" + jerseyNum + '\'' +
                 ", centuries=" + centuries +
                 ", halfCenturies=" + halfCenturies +
                 ", age=" + age +
                 ", gender=" + gender +
                 ", totalRuns=" + totalRuns +
                 ", average=" + average +
+                ", captain=" + isCaptain +
                 '}';
-    }
-
-    public int getTotalMatches() {
-        return totalMatches;
-    }
-
-    public void setTotalMatches(int totalMatches) {
-        this.totalMatches = totalMatches;
-    }
-
-    public Long getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
     }
 
     public String getPlayerName() {
@@ -67,20 +56,12 @@ public class PlayerModel {
         this.playerName = playerName;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public TeamModel getTeam() {
+        return team;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getJerseyNum() {
-        return jerseyNum;
-    }
-
-    public void setJerseyNum(String jerseyNum) {
-        this.jerseyNum = jerseyNum;
+    public void setTeam(TeamModel team) {
+        this.team = team;
     }
 
     public Integer getCenturies() {
@@ -129,5 +110,21 @@ public class PlayerModel {
 
     public void setAverage(Double average) {
         this.average = average;
+    }
+
+    public int getTotalMatches() {
+        return totalMatches;
+    }
+
+    public void setTotalMatches(int totalMatches) {
+        this.totalMatches = totalMatches;
+    }
+
+    public boolean isCaptain() {
+        return isCaptain;
+    }
+
+    public void setCaptain(boolean captain) {
+        isCaptain = captain;
     }
 }

@@ -36,25 +36,25 @@ public class PlayerController {
 
     @PostMapping("/save/player")
     public String savePlayer(@ModelAttribute PlayerModel p, RedirectAttributes model){
-        if(p.getPlayerId() == null){
+        if(p.getId() == null){
             // create
             p.setAverage((double) (p.getTotalRuns()/p.getTotalMatches()));
             playerRepo.save(p); // db insert into players table, returns void
             model.addAttribute("success", "Player created successfully");
         }else{
-           Optional<PlayerModel> opt =  playerRepo.findById(p.getPlayerId());
+           Optional<PlayerModel> opt =  playerRepo.findById(p.getId());
            if(opt.isPresent()){
                PlayerModel p2 = opt.get();
                p2.setPlayerName(p.getPlayerName());
                p2.setAge(p.getAge());
-               p2.setTeamName(p.getTeamName());
+          //     p2.setTeam();
                p2.setTotalMatches(p.getTotalMatches());
                p2.setAverage((double) (p.getTotalRuns()/p.getTotalMatches()));
                p2.setTotalRuns(p.getTotalRuns());
                p2.setCenturies(p.getCenturies());
                p2.setHalfCenturies(p.getHalfCenturies());
                p2.setGender(p.getGender());
-               p2.setJerseyNum(p.getJerseyNum());
+       //        p2.setJerseyNum(p.getJerseyNum());
                playerRepo.save(p2);
                model.addAttribute("success", "Player updated successfully");
            }
