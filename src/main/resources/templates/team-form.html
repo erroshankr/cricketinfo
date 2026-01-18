@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Create Player</title>
+    <title>Create Team</title>
 
     <style>
         body {
@@ -77,72 +77,27 @@
 
 <div class="container">
 
-    <h2>Create Player</h2>
+    <h2>Create Team</h2>
 
-    <form th:action="@{/player/save}"
-          th:object="${player}"
+    <form th:action="@{/team/save}"
+          th:object="${team}"
           method="post">
 
         <!-- Hidden field for Update -->
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-row">
-            <label>Player Name</label>
-            <input type="text" th:field="*{playerName}" required>
+            <label>Team Name</label>
+            <input type="text" th:field="*{name}" required>
         </div>
 
         <div class="form-row">
-            <label>Team</label>
-            <select th:field="*{team}" required>
-                <option value="">-- Select Team --</option>
-                <option th:each="t : ${teams}"
-                        th:value="${t.id}"
-                        th:text="${t.name}">
-                </option>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <label>Total Matches</label>
-            <input type="number" th:field="*{totalMatches}">
-        </div>
-
-        <div class="form-row">
-            <label>Age</label>
-            <input type="number" th:field="*{age}">
-        </div>
-
-        <div class="form-row">
-            <label>Gender</label>
-            <select th:field="*{gender}">
-                <option value="">Select Gender</option>
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <label>Centuries</label>
-            <input type="number" th:field="*{centuries}">
-        </div>
-
-        <div class="form-row">
-            <label>Half-Centuries</label>
-            <input type="number" th:field="*{halfCenturies}">
-        </div>
-
-        <div class="form-row">
-            <label>Total Runs</label>
-            <input type="number" th:field="*{totalRuns}">
-        </div>
-
-        <div class="form-row">
-            <label>Is Captain ?</label>
-            <input type="checkbox" th:field="*{captain}">
+            <label>Country Name</label>
+            <input type="text" th:field="*{country}" required>
         </div>
 
         <button type="submit"
-                th:text="${player.id} == null ? 'Save Player' : 'Update Player'">
+                th:text="${team.id} == null ? 'Save Team' : 'Update Team'">
         </button>
 
     </form>

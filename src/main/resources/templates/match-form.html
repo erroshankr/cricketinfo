@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Create Player</title>
+    <title>Create Match</title>
 
     <style>
         body {
@@ -77,23 +77,18 @@
 
 <div class="container">
 
-    <h2>Create Player</h2>
+    <h2>Create Match</h2>
 
-    <form th:action="@{/player/save}"
-          th:object="${player}"
+    <form th:action="@{/match/save}"
+          th:object="${match}"
           method="post">
 
         <!-- Hidden field for Update -->
         <input type="hidden" th:field="*{id}" />
 
         <div class="form-row">
-            <label>Player Name</label>
-            <input type="text" th:field="*{playerName}" required>
-        </div>
-
-        <div class="form-row">
             <label>Team</label>
-            <select th:field="*{team}" required>
+            <select th:field="*{team1}" required>
                 <option value="">-- Select Team --</option>
                 <option th:each="t : ${teams}"
                         th:value="${t.id}"
@@ -103,46 +98,72 @@
         </div>
 
         <div class="form-row">
-            <label>Total Matches</label>
-            <input type="number" th:field="*{totalMatches}">
-        </div>
-
-        <div class="form-row">
-            <label>Age</label>
-            <input type="number" th:field="*{age}">
-        </div>
-
-        <div class="form-row">
-            <label>Gender</label>
-            <select th:field="*{gender}">
-                <option value="">Select Gender</option>
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
+            <label>Team</label>
+            <select th:field="*{team2}" required>
+                <option value="">-- Select Team --</option>
+                <option th:each="t : ${teams}"
+                        th:value="${t.id}"
+                        th:text="${t.name}">
+                </option>
             </select>
         </div>
 
         <div class="form-row">
-            <label>Centuries</label>
-            <input type="number" th:field="*{centuries}">
+            <label>Venue</label>
+            <input type="text" th:field="*{venue}">
         </div>
 
         <div class="form-row">
-            <label>Half-Centuries</label>
-            <input type="number" th:field="*{halfCenturies}">
+            <label>Date</label>
+            <input type="datetime-local" th:field="*{date}">
         </div>
 
         <div class="form-row">
-            <label>Total Runs</label>
-            <input type="number" th:field="*{totalRuns}">
+            <label>Man of the Match</label>
+            <select th:field="*{manOfTheMatch}">
+                <option value="">-- Select Player --</option>
+                <option th:each="t : ${players}"
+                        th:value="${t.id}"
+                        th:text="${t.playerName}">
+                </option>
+            </select>
         </div>
 
         <div class="form-row">
-            <label>Is Captain ?</label>
-            <input type="checkbox" th:field="*{captain}">
+            <label>Status</label>
+            <select th:field="*{status}">
+                <option value="">Select Status</option>
+                <option value="SCHEDULED">SCHEDULED</option>
+                <option value="IN_PROGRESS">IN_PROGRESS</option>
+                <option value="COMPLETED">COMPLETED</option>
+            </select>
         </div>
+
+        <div class="form-row">
+            <label>Winner</label>
+        <select th:field="*{winner}" required>
+            <option value="">-- Select Winner --</option>
+            <option th:each="t : ${teams}"
+                    th:value="${t.id}"
+                    th:text="${t.name}">
+            </option>
+        </select>
+        </div>
+
+        <div class="form-row">
+            <label>Toss-Winner</label>
+        <select th:field="*{tossWinner}" required>
+            <option value="">-- Select Team --</option>
+            <option th:each="t : ${teams}"
+                    th:value="${t.id}"
+                    th:text="${t.name}">
+            </option>
+        </select>
+        </div>
+
 
         <button type="submit"
-                th:text="${player.id} == null ? 'Save Player' : 'Update Player'">
+                th:text="${match.id} == null ? 'Save Match' : 'Update Match'">
         </button>
 
     </form>

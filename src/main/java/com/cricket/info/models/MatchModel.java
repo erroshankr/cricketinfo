@@ -1,10 +1,7 @@
 package com.cricket.info.models;
 
 import com.cricket.info.enums.MatchStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -18,8 +15,8 @@ public class MatchModel extends BaseModel{
     private TeamModel team2; // match me jo team2 ka value h wo team table ka ID h --> foreign key
     private String venue;
     private LocalDate date;
+    @Enumerated(EnumType.STRING)
     private MatchStatus status;
-    private String result;
     private String winner;
     @ManyToOne
     private TeamModel tossWinner; // IND vs SA -> IND won toss in one match but can win toss in other match also
@@ -64,14 +61,6 @@ public class MatchModel extends BaseModel{
 
     public void setStatus(MatchStatus status) {
         this.status = status;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
     }
 
     public String getWinner() {

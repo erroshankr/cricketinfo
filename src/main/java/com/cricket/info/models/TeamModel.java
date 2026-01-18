@@ -35,3 +35,19 @@ public class TeamModel extends BaseModel{
     }
 
 }
+/**
+ <bean id='teamModel' class=TeamModel>
+ *     <property name='name' value='India'/>
+ *     <property name='country' value='India'/>
+ *  </bean>
+ */
+
+
+// Bean is an object created & managed by Spring
+// Spring Creates object, manages its lifecycle and destroys object using bean defination
+
+
+// BaseEntity -> Team -> Player -> Match
+//team.html --> CRUD --> TeamController
+//match.html --> CRUD --> MatchController
+//player.html --> CRUD --> PlayerController

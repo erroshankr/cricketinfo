@@ -135,57 +135,55 @@
 
         <h2>Add New Player</h2>
 
-        <form th:action="@{/create/player}" method="post">
+        <form th:action="@{/player/create}" method="post">
 
             <input type="text" name="playerName" placeholder="Player Name" required>
             <input type="text" name="teamName" placeholder="Team Name" required>
-            <input type="text" name="jerseyNum" placeholder="Jersey Number">
             <input type="number" name="age" placeholder="Age">
             <input type="text" name="gender" placeholder="Gender">
             <input type="number" name="centuries" placeholder="Centuries">
             <input type="number" name="halfCenturies" placeholder="Half Centuries">
             <input type="number" name="totalRuns" placeholder="Total Runs">
             <input type="number" name="totalMatches" placeholder="Total Matches Played">
-
+            <input type="checkbox" name="captain" placeholder="Is Captain">
             <br><br>
             <button type="submit">Save Player</button>
         </form>
     </div>
 </div>
 
-
 <table>
     <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Team</th>
-        <th>Matches</th>
-        <th>Jersey</th>
+        <th>Total Matches</th>
         <th>Age</th>
         <th>Gender</th>
         <th>Centuries</th>
         <th>Half-Centuries</th>
         <th>Total Runs</th>
         <th>Average</th>
+        <th>Captain</th>
         <th>Actions</th>
     </tr>
 
     <tr th:each="p : ${players}">
-        <td th:text="${p.playerId}"></td>
+        <td th:text="${p.id}"></td>
         <td th:text="${p.playerName}"></td>
-        <td th:text="${p.teamName}"></td>
+        <td th:text="${p.team.name}"></td>
         <td th:text="${p.totalMatches}"></td>
-        <td th:text="${p.jerseyNum}"></td>
         <td th:text="${p.age}"></td>
         <td th:text="${p.gender}"></td>
         <td th:text="${p.centuries}"></td>
         <td th:text="${p.halfCenturies}"></td>
         <td th:text="${p.totalRuns}"></td>
         <td th:text="${p.average}"></td>
+        <td th:text="${p.captain}"></td>
 
         <td class="action-icons">
-            <a th:href="@{/player/edit/{id}(id=${p.playerId})}">✏️</a>
-            <form th:action="@{/player/delete/{id}(id=${p.playerId})}"
+            <a th:href="@{/player/edit/{id}(id=${p.id})}">✏️</a>
+            <form th:action="@{/player/delete/{id}(id=${p.id})}"
                   method="post"
                   style="display:inline;">
 

@@ -2,39 +2,52 @@ package com.cricket.info.controller;
 
 import com.cricket.info.models.PlayerModel;
 import com.cricket.info.repo.PlayerRepository;
+import com.cricket.info.repo.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
+@RequestMapping(value = "/player")
 public class PlayerController {
 
     @Autowired
     private PlayerRepository playerRepo;
 
-    Map<String, PlayerModel> playerModelMap = new HashMap<>();
+    @Autowired
+    private TeamRepository teamRepository;
 
     @GetMapping("/")
-    public String displayAppName(Model model){
-        return "redirect:/list/players";
+    public String getPlayerHome(){
+        return "redirect:/player/list";
     }
 
+    @GetMapping("/list")
+    public String fetchPlayers(Model model){
+        List<PlayerModel> players = playerRepo.findAll();
+        if(players.isEmpty()){
+            model.addAttribute("error", "No players found");
+        }else{
+            model.addAttribute("success", players.size() + " Players found");
+        }
+        model.addAttribute("players", players);
+        return "player";
+    }
 
-    @GetMapping("/player/new")
+    @GetMapping("/new")
     public String createNewPlayer(Model model){
         model.addAttribute("player", new PlayerModel()); // model.addAttribute send backend data to frontend
+        model.addAttribute("teams", teamRepository.findAll());
         return "player-form";
     }
 
 
-    @PostMapping("/save/player")
+    @PostMapping("/save")
     public String savePlayer(@ModelAttribute PlayerModel p, RedirectAttributes model){
         if(p.getId() == null){
             // create
@@ -54,43 +67,32 @@ public class PlayerController {
                p2.setCenturies(p.getCenturies());
                p2.setHalfCenturies(p.getHalfCenturies());
                p2.setGender(p.getGender());
-       //        p2.setJerseyNum(p.getJerseyNum());
+
                playerRepo.save(p2);
                model.addAttribute("success", "Player updated successfully");
            }
         }
-        return "redirect:/list/players";
+        return "redirect:/player/";
 
     }
 
-    @GetMapping("/player/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String getPlayerById(@PathVariable Long id, Model model){
       Optional<PlayerModel> opt = playerRepo.findById(id);
       if(opt.isEmpty()){
           List<PlayerModel> li = (List<PlayerModel>) playerRepo.findAll();
           model.addAttribute("players", li);
           model.addAttribute("error", "No player found for with given ID: " + id);
-          return "home";
+          return "player";
       }
       PlayerModel p = opt.get();
       model.addAttribute("player", p);
       model.addAttribute("success", "Player found");
+      model.addAttribute("teams", teamRepository.findAll());
       return "player-form";
     }
 
-    @GetMapping("/list/players")
-    public String fetchPlayers(Model model){
-        List<PlayerModel> players = (List<PlayerModel>) playerRepo.findAll();
-        if(players.isEmpty()){
-            model.addAttribute("error", "No players found");
-        }else{
-            model.addAttribute("success", players.size() + " Players found");
-        }
-        model.addAttribute("players", players);
-        return "home";
-    }
-
-    @DeleteMapping("/player/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String removePlayerById(@PathVariable Long id, RedirectAttributes model){
         Optional<PlayerModel> opt = playerRepo.findById(id);
         if(opt.isPresent()) {
@@ -100,7 +102,7 @@ public class PlayerController {
             model.addFlashAttribute("error", "Player not found for deletion");
         }
 
-        return "redirect:/list/players";
+        return "redirect:/player/";
 
     }
 

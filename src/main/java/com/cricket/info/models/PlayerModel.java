@@ -1,14 +1,13 @@
 package com.cricket.info.models;
 
 import com.cricket.info.enums.Gender;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.lang.reflect.Type;
 
 @Entity  // This class is mapped to a table in database -> ORM -> Object Relational Mapping
 @Table(name = "players")
-public class PlayerModel extends BaseModel{
+public class PlayerModel extends BaseModel {
 
     // SELECT * from players INNER JOIN team on player.team = team.id where team.id = 1;
 
@@ -22,11 +21,12 @@ public class PlayerModel extends BaseModel{
     private Integer centuries;
     private Integer halfCenturies;
     private Integer age;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private Integer totalRuns;
     private Double average;
     private int totalMatches;
-    private boolean isCaptain;
+    private boolean captain;
 
     public PlayerModel() {
     }
@@ -44,7 +44,7 @@ public class PlayerModel extends BaseModel{
                 ", gender=" + gender +
                 ", totalRuns=" + totalRuns +
                 ", average=" + average +
-                ", captain=" + isCaptain +
+                ", captain=" + captain +
                 '}';
     }
 
@@ -121,10 +121,10 @@ public class PlayerModel extends BaseModel{
     }
 
     public boolean isCaptain() {
-        return isCaptain;
+        return captain;
     }
 
     public void setCaptain(boolean captain) {
-        isCaptain = captain;
+        this.captain = captain;
     }
 }

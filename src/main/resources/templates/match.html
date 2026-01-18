@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cricket Info App</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #217dbb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .action-icons a {
+            margin: 0 5px;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .action-icons a:hover {
+            color: #e74c3c;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 8% auto;
+            padding: 20px;
+            width: 40%;
+            border-radius: 10px;
+        }
+
+        .close {
+            float: right;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        button {
+            background:#27ae60;
+        }
+        button:hover {
+            background:#1e8449;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<h1>Cricket Info App</h1>
+<p>This is a cricket related app</p>
+
+<!-- Teams Table -->
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2>Teams List</h2>
+    <!-- Success Message -->
+    <div th:if="${success}"
+         style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:10px;">
+        <span th:text="${success}"></span>
+    </div>
+
+    <!-- Failure Message -->
+    <div th:if="${error}"
+         style="background:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:10px;">
+        <span th:text="${error}"></span>
+    </div>
+
+    <button onclick="location.href='/match/new'">
+        + Create Team
+    </button>
+</div>
+
+<!-- Popup Modal -->
+<div id="matchModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm()">&times;</span>
+
+        <h2>Add New Team</h2>
+
+        <form th:action="@{/match/create}" method="post">
+
+            <input type="text" name="team1" placeholder="Team1 name" required>
+            <input type="text" name="team2" placeholder="Team2 name" required>
+            <input type="text" name="venue" placeholder="Venue">
+            <input type="datetime-local" name="date" placeholder="Date">
+            <input type="text" name="status" placeholder="Status">
+            <input type="text" name="winner" placeholder="Winner">
+            <input type="text" name="tossWinner" placeholder="Toss Winner">
+            <input type="text" name="manOfTheMatch" placeholder="Man of the Match">
+
+            <br><br>
+            <button type="submit">Save Team</button>
+        </form>
+    </div>
+</div>
+
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Team1</th>
+        <th>Team2</th>
+        <th>Venue</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Winner</th>
+        <th>Toss-Winner</th>
+        <th>Man of the Match</th>
+    </tr>
+
+    <tr th:each="m : ${matches}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.team1}"></td>
+        <td th:text="${m.team2}"></td>
+        <td th:text="${m.venue}"></td>
+        <td th:text="${m.date}"></td>
+        <td th:text="${m.status}"></td>
+        <td th:text="${m.winner}"></td>
+        <td th:text="${m.tossWinner}"></td>
+        <td th:text="${m.manOfTheMatch}"></td>
+
+        <td class="action-icons">
+            <a th:href="@{/match/edit/{id}(id=${m.id})}">✏️</a>
+            <form th:action="@{/match/delete/{id}(id=${m.id})}"
+                  method="post"
+                  style="display:inline;">
+
+                <input type="hidden" name="_method" value="DELETE"/>
+
+                <button type="submit" style="border:none; background:none; cursor:pointer;">
+                    🗑️
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>
+<script>
+    function openForm() {
+        documenm.getElementById("matchModal").style.display = "block";
+    }
+    function closeForm() {
+        documenm.getElementById("matchModal").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
