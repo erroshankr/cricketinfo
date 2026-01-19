@@ -1,9 +1,9 @@
 package com.cricket.info.controller;
 
 import com.cricket.info.models.MatchModel;
-import com.cricket.info.repo.MatchRepository;
 import com.cricket.info.repo.PlayerRepository;
-import com.cricket.info.repo.TeamRepository;
+import com.cricket.info.services.MatchService;
+import com.cricket.info.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +15,13 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/match")
-public class MatchController {
+public class MatchController {    // controller -> service -> repository -> Model(data -> DB)
 
     @Autowired
-    private MatchRepository matchRepository;
+    private MatchService matchService;
 
     @Autowired
-    private TeamRepository teamRepository;
+    private TeamService teamService;
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -32,21 +32,21 @@ public class MatchController {
     }
 
     @GetMapping("/list")
-    public String fetchMatchs(Model model){
-        List<MatchModel> matches = matchRepository.findAll();
+    public String fetchMatches(Model model){
+        List<MatchModel> matches = matchService.findAllMatches();
         if(matches.isEmpty()){
             model.addAttribute("error", "No matchs found");
         }else{
             model.addAttribute("success", matches.size() + " Matchs found");
         }
-        model.addAttribute("matchs", matches);
+        model.addAttribute("matches", matches);
         return "match";
     }
 
     @GetMapping("/new")
     public String createNewMatch(Model model){
         model.addAttribute("match", new MatchModel()); // model.addAttribute send backend data to frontend
-        model.addAttribute("teams", teamRepository.findAll());
+        model.addAttribute("teams", teamService.findAllTeams());
         model.addAttribute("players", playerRepository.findAll());
         return "match-form";
     }
@@ -56,7 +56,7 @@ public class MatchController {
     public String saveMatch(@ModelAttribute MatchModel p, RedirectAttributes model){
         if(p.getId() == null){
             // create
-            matchRepository.save(p); // db insert into matchs table, returns void
+            matchService.addMatch(p); // db insert into matchs table, returns void
             model.addAttribute("success", "Match created successfully");
         }else{
             Optional<MatchModel> opt =  matchRepository.findById(p.getId());

@@ -1,209 +1,237 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cricket Info App</title>
+    <title>Player Management | Cricket Info App</title>
 
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f5f5f5;
+            background: #f4f6f9;
         }
 
-        h1 {
+        /* Top Header */
+        .header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        }
+
+        /* Page Title + Button */
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title h2 {
+            margin: 0;
             color: #2c3e50;
         }
 
-        button {
-            padding: 8px 15px;
-            margin: 5px;
-            border: none;
-            background-color: #3498db;
+        .btn {
+            background: #27ae60;
             color: white;
-            cursor: pointer;
+            padding: 10px 18px;
             border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
         }
 
-        button:hover {
-            background-color: #217dbb;
+        .btn:hover {
+            background: #1e8449;
         }
 
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
+            margin-top: 15px;
         }
 
         th {
-            background-color: #2c3e50;
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Captain Badge */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
             color: white;
         }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        .badge-yes {
+            background: #27ae60;
         }
 
-        .action-icons a {
+        .badge-no {
+            background: #e74c3c;
+        }
+
+        /* Action Icons */
+        .actions a, .actions button {
             margin: 0 5px;
-            color: #2c3e50;
             text-decoration: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        .action-icons a:hover {
+        .actions a:hover {
+            color: #2980b9;
+        }
+
+        .actions button:hover {
             color: #e74c3c;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5);
+        /* Message Box */
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 8% auto;
-            padding: 20px;
-            width: 40%;
-            border-radius: 10px;
+        .success {
+            background: #d4edda;
+            color: #155724;
         }
 
-        .close {
-            float: right;
-            font-size: 22px;
-            cursor: pointer;
+        .error {
+            background: #f8d7da;
+            color: #721c24;
         }
-
-        input {
-            width: 95%;
-            padding: 8px;
-            margin: 6px 0;
-        }
-
-        button {
-            background:#27ae60;
-        }
-        button:hover {
-            background:#1e8449;
-        }
-
-
     </style>
 </head>
 <body>
 
-<h1>Cricket Info App</h1>
-<p>This is a cricket related app</p>
-
-<!-- Players Table -->
-<div style="display:flex; justify-content:space-between; align-items:center;">
-    <h2>Players List</h2>
-    <!-- Success Message -->
-    <div th:if="${success}"
-         style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:10px;">
-        <span th:text="${success}"></span>
-    </div>
-
-    <!-- Failure Message -->
-    <div th:if="${error}"
-         style="background:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:10px;">
-        <span th:text="${error}"></span>
-    </div>
-
-    <button onclick="location.href='/player/new'">
-        + Create Player
-    </button>
+<!-- Header -->
+<div class="header">
+    <h1>🏏 Cricket Info App</h1>
+    <a th:href="@{/}">Home</a>
 </div>
 
-<!-- Popup Modal -->
-<div id="playerModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeForm()">&times;</span>
+<!-- Main Container -->
+<div class="container">
 
-        <h2>Add New Player</h2>
-
-        <form th:action="@{/player/create}" method="post">
-
-            <input type="text" name="playerName" placeholder="Player Name" required>
-            <input type="text" name="teamName" placeholder="Team Name" required>
-            <input type="number" name="age" placeholder="Age">
-            <input type="text" name="gender" placeholder="Gender">
-            <input type="number" name="centuries" placeholder="Centuries">
-            <input type="number" name="halfCenturies" placeholder="Half Centuries">
-            <input type="number" name="totalRuns" placeholder="Total Runs">
-            <input type="number" name="totalMatches" placeholder="Total Matches Played">
-            <input type="checkbox" name="captain" placeholder="Is Captain">
-            <br><br>
-            <button type="submit">Save Player</button>
-        </form>
+    <!-- Page Title -->
+    <div class="page-title">
+        <h2>Player Management</h2>
+        <a th:href="@{/player/new}" class="btn">
+            <i class="fa fa-plus"></i> Add Player
+        </a>
     </div>
+
+    <!-- Messages -->
+    <div th:if="${success}" class="message success" th:text="${success}"></div>
+    <div th:if="${error}" class="message error" th:text="${error}"></div>
+
+    <!-- Player Table -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Team</th>
+            <th>Matches</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Centuries</th>
+            <th>Half</th>
+            <th>Runs</th>
+            <th>Average</th>
+            <th>Captain</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="p : ${players}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.playerName}"></td>
+            <td>
+                <a th:href="@{/team/find/{id}(id=${p.team.id})}"
+                   th:text="${p.team.name}"
+                   style="text-decoration:none; color:#2980b9; font-weight:bold;">
+                </a>
+            </td>
+            <td th:text="${p.totalMatches}"></td>
+            <td th:text="${p.age}"></td>
+            <td th:text="${p.gender}"></td>
+            <td th:text="${p.centuries}"></td>
+            <td th:text="${p.halfCenturies}"></td>
+            <td th:text="${p.totalRuns}"></td>
+            <td th:text="${p.average}"></td>
+
+            <!-- Captain Badge -->
+            <td>
+                <span th:if="${p.captain}" class="badge badge-yes">YES</span>
+                <span th:unless="${p.captain}" class="badge badge-no">NO</span>
+            </td>
+
+            <!-- Actions -->
+            <td class="actions">
+                <a th:href="@{/player/edit/{id}(id=${p.id})}">
+                    <i class="fa fa-pen"></i>
+                </a>
+
+                <form th:action="@{/player/delete/{id}(id=${p.id})}"
+                      method="post"
+                      style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
 </div>
-
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Team</th>
-        <th>Total Matches</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Centuries</th>
-        <th>Half-Centuries</th>
-        <th>Total Runs</th>
-        <th>Average</th>
-        <th>Captain</th>
-        <th>Actions</th>
-    </tr>
-
-    <tr th:each="p : ${players}">
-        <td th:text="${p.id}"></td>
-        <td th:text="${p.playerName}"></td>
-        <td th:text="${p.team.name}"></td>
-        <td th:text="${p.totalMatches}"></td>
-        <td th:text="${p.age}"></td>
-        <td th:text="${p.gender}"></td>
-        <td th:text="${p.centuries}"></td>
-        <td th:text="${p.halfCenturies}"></td>
-        <td th:text="${p.totalRuns}"></td>
-        <td th:text="${p.average}"></td>
-        <td th:text="${p.captain}"></td>
-
-        <td class="action-icons">
-            <a th:href="@{/player/edit/{id}(id=${p.id})}">✏️</a>
-            <form th:action="@{/player/delete/{id}(id=${p.id})}"
-                  method="post"
-                  style="display:inline;">
-
-                <input type="hidden" name="_method" value="DELETE"/>
-
-                <button type="submit" style="border:none; background:none; cursor:pointer;">
-                    🗑️
-                </button>
-            </form>
-        </td>
-    </tr>
-</table>
-<script>
-    function openForm() {
-        document.getElementById("playerModal").style.display = "block";
-    }
-    function closeForm() {
-        document.getElementById("playerModal").style.display = "none";
-    }
-</script>
 
 </body>
 </html>

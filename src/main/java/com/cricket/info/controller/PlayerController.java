@@ -77,7 +77,7 @@ public class PlayerController {
     }
 
     @GetMapping("/edit/{id}")
-    public String getPlayerById(@PathVariable Long id, Model model){
+    public String editPlayerById(@PathVariable Long id, Model model){
       Optional<PlayerModel> opt = playerRepo.findById(id);
       if(opt.isEmpty()){
           List<PlayerModel> li = (List<PlayerModel>) playerRepo.findAll();
@@ -90,6 +90,20 @@ public class PlayerController {
       model.addAttribute("success", "Player found");
       model.addAttribute("teams", teamRepository.findAll());
       return "player-form";
+    }
+
+    @GetMapping("/find/{id}")
+    public String getPlayerById(@PathVariable Long id, Model model){
+        Optional<PlayerModel> opt = playerRepo.findById(id);
+        if(opt.isEmpty()){
+            model.addAttribute("players", null);
+            model.addAttribute("error", "No player found for with given ID: " + id);
+            return "player";
+        }
+        PlayerModel p = opt.get();
+        model.addAttribute("players", List.of(p));
+        model.addAttribute("success", "Player found");
+        return "player";
     }
 
     @DeleteMapping("/delete/{id}")

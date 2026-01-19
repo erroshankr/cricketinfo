@@ -34,6 +34,13 @@ public class TeamModel extends BaseModel{
         this.country = country;
     }
 
+    @Override
+    public String toString() {
+        return "TeamModel{" +
+                "name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 }
 /**
  <bean id='teamModel' class=TeamModel>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cricket Info App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 120px;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+            width: 60%;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            background-color: #27ae60;
+            padding: 15px 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #1e8449;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 80px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🏏 Cricket Info App</h1>
+
+    <p>
+        Welcome to the Cricket Info Application.
+        Manage teams, players, and matches all in one place.
+        This system helps you store cricket statistics, player details, team records,
+        and match information efficiently.
+    </p>
+
+    <div class="btn-group">
+        <a th:href="@{/player/}" class="btn">Player Management</a>
+        <a th:href="@{/team/}" class="btn">Team Management</a>
+        <a th:href="@{/match/}" class="btn">Match Management</a>
+    </div>
+
+    <footer>
+        <p>Cricket Info App © 2026</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
