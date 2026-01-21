@@ -1,15 +1,13 @@
 package com.cricket.info.services;
 
+import com.cricket.info.exceptions.PlayerNotFoundException;
 import com.cricket.info.models.PlayerModel;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface PlayerService {
-    PlayerModel getPlayerById(Long id);
+    PlayerModel getPlayerById(Long id) throws PlayerNotFoundException;
     List<PlayerModel> findAllPlayers();
-    void addPlayer(PlayerModel player);
-    void updatePlayer(PlayerModel player);
-    void deletePlayer(Long id);
+    void savePlayer(PlayerModel player) throws Exception;
+    void deletePlayer(Long id) throws PlayerNotFoundException;
 }

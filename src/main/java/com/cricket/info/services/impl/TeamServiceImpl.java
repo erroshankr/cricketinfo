@@ -32,38 +32,27 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void addTeam(TeamModel team) {
-        try {
-            if(team.getName().length() > 3){
-                throw new RuntimeException("Team name should be more than 3 characters");
-            }
-            team.setName(team.getName().toUpperCase());
-            teamRepository.save(team);
-        }catch (Exception e){
-            throw new RuntimeException("Error while adding team" + e.getMessage());
-        }
-    }
-
-    @Override
-    public void updateTeam(TeamModel team) throws TeamNotFoundException{
-        Optional<TeamModel> opt = teamRepository.findById(team.getId());
-        if (opt.isPresent()) {
-            TeamModel t2 = opt.get();
-            t2.setName(team.getName());
-            t2.setCountry(team.getCountry());
-
-            teamRepository.save(t2);
-        }else{
-            throw new TeamNotFoundException("Team not found for given ID: " + team.getId());
-        }
-    }
-
-    @Override
-    public void deleteTeam(Long id) {
-       try{
-           teamRepository.deleteById(id);
-       }catch (Exception e){
-           throw new RuntimeException("Error while deleting team: " + e.getMessage());
+    public void saveTeam(TeamModel team) throws Exception{
+       if(team.getId() == null){
+           teamRepository.save(team);
+       }else{
+           Optional<TeamModel> opt = teamRepository.findById(team.getId());
+           if(opt.isEmpty()){
+               throw new TeamNotFoundException("Team not found for given ID: " + team.getId());
+           }
+           TeamModel t2 = opt.get();
+           t2.setName(team.getName());
+           t2.setCountry(team.getCountry());
+           teamRepository.save(t2);
        }
+    }
+
+    @Override
+    public void deleteTeam(Long id) throws TeamNotFoundException{
+        Optional<TeamModel> opt = teamRepository.findById(id);
+        if(opt.isEmpty()) {
+            throw new TeamNotFoundException("Team not found for deletion with ID: " + id);
+        }
+        teamRepository.deleteById(id);
     }
 }

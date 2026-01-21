@@ -3,6 +3,7 @@ package com.cricket.info.controller;
 import com.cricket.info.exceptions.TeamNotFoundException;
 import com.cricket.info.models.TeamModel;
 import com.cricket.info.services.TeamService;
+import com.cricket.info.validators.TeamDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,9 @@ public class TeamController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private TeamDataValidator teamDataValidator;
 
     @GetMapping("/")
     public String getTeams(RedirectAttributes model){
@@ -85,17 +89,20 @@ public class TeamController {
     @PostMapping("/save")
     public String saveTeam(@ModelAttribute TeamModel t, Model model){
 
-        try {
-            if (t.getId() == null) {
-                // create
-                teamService.addTeam(t); // db insert into teams table, returns void
-                model.addAttribute("success", "Team created successfully");
-            } else {
-                teamService.updateTeam(t);
-                model.addAttribute("success", "Team updated successfully");
+        if(t.getId() == null){
+            // create
+            List<String> errors = teamDataValidator.validate(t);
+            if(!errors.isEmpty()){
+                model.addAttribute("error", errors);
+            }else {
+                try {
+                    teamService.saveTeam(t); // db insert into matches table, returns void
+                    model.addAttribute("success", "Team created successfully");
+                } catch (Exception e) {
+                    model.addAttribute("error", "Error during team data creation");
+                }
             }
-        } catch (TeamNotFoundException | RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
+
         }
         model.addAttribute("teams", teamService.findAllTeams());
         return "team";
