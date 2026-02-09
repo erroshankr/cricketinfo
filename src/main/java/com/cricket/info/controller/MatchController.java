@@ -112,3 +112,19 @@ public class MatchController {    // controller -> service -> repository -> Mode
         return "match";
     }
 }
+
+
+/**
+ * Spring Security --> Authentication(Who are you ) + Authorization(What do you do)
+ * DB -> auth ->username, password, role -> SELECT * from auth where username = roshan;
+ * encryption: Roshan123 --> #$^btnku58757itbit7&$&^%*UF%*&^&&( -> JWT -> Json Web Token
+ *
+ * Client Request --> Security Filter Chain -> Authenticate --> Authorize -> controller
+ *
+ *Common filter:
+ * UsernamePasswordAuthenticationFilter
+ * BasicAuthenticationFilter
+ * jwtAuthenticationFilter
+ * ExceptionTranslatorFilter
+ *
+ */
