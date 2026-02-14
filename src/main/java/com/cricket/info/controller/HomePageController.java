@@ -1,5 +1,6 @@
 package com.cricket.info.controller;
 
+import com.cricket.info.enums.Role;
 import com.cricket.info.exceptions.UserNotCreatedException;
 import com.cricket.info.models.UserModel;
 import com.cricket.info.services.UserService;
@@ -31,16 +32,28 @@ public class HomePageController {
     @GetMapping("/register")
     public String getRegistrationPage(Model model){
         model.addAttribute("user", new UserModel());
+        model.addAttribute("availableRoles", Role.getAllRoleNames());
         return "signup";  // signup.html
     }
 
     @PostMapping("/user-create")
-    public String registerUser(Model model, @ModelAttribute UserModel userModel){
+    public String registerUser(Model model,
+                               @ModelAttribute UserModel userModel,
+                               @RequestParam(value = "selectedRoles", required = false) List<String> selectedRoles){
+
         List<String> errors =  userInfoValidator.validate(userModel);
         if(!errors.isEmpty()) {
           model.addAttribute("error", errors);
           model.addAttribute("user", new UserModel());
+          model.addAttribute("availableRoles", Role.getAllRoleNames());
           return "signup";
+        }
+
+        // Join selected roles into comma-separated string, default to USER if none selected
+        if (selectedRoles == null || selectedRoles.isEmpty()) {
+            userModel.setRoles(Role.USER.getRoleName());
+        } else {
+            userModel.setRoles(String.join(",", selectedRoles));
         }
 
         try {
@@ -48,6 +61,7 @@ public class HomePageController {
         } catch (UserNotCreatedException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("user", new UserModel());
+            model.addAttribute("availableRoles", Role.getAllRoleNames());
             return "signup";
         }
         model.addAttribute("success", "User with username " + userModel.getUsername() + " registered successfully");

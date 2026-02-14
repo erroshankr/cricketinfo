@@ -1,5 +1,6 @@
 package com.cricket.info.config;
 
+import com.cricket.info.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,9 +18,16 @@ public class SecurityConfig { // this is the core of integration
        http
                .authorizeHttpRequests(auth -> auth
                        .requestMatchers("/login", "/register","/user-create","/css/**","/js/**").permitAll()
-                       .requestMatchers("/team/**").hasAnyRole("TEAM-ADMIN","SUPER-ADMIN")
-                       .requestMatchers("/player/**").hasAnyRole("PLAYER-ADMIN","SUPER-ADMIN")
-                       .requestMatchers("/match/**").hasAnyRole("MATCH-ADMIN","SUPER-ADMIN")
+
+                       // Only write operations require admin roles (new, save, edit, delete)
+                       .requestMatchers("/team/**")
+                           .hasAnyRole(Role.TEAM_ADMIN.getRoleName(), Role.SUPER_ADMIN.getRoleName())
+                       .requestMatchers("/player/**")
+                           .hasAnyRole(Role.PLAYER_ADMIN.getRoleName(), Role.SUPER_ADMIN.getRoleName())
+                       .requestMatchers("/match/**")
+                           .hasAnyRole(Role.MATCH_ADMIN.getRoleName(), Role.SUPER_ADMIN.getRoleName())
+
+                       // List, view, find pages -- any authenticated user
                        .anyRequest().authenticated()
                )
                .formLogin(form -> form
@@ -35,6 +43,9 @@ public class SecurityConfig { // this is the core of integration
                        .invalidateHttpSession(true)
                        .deleteCookies("JSESSIONID")
                        .permitAll()
+               )
+               .exceptionHandling(ex -> ex
+                       .accessDeniedPage("/access-denied")
                );
 
        return http.build();

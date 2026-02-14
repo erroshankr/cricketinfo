@@ -15,7 +15,7 @@ public class UserModel extends BaseModel{
     private String username;
 
     @Column(nullable = false)
-    private String roles = "USER"; //default USER,TEAM_ADMIN
+    private String roles;
 
     private String password;
 
