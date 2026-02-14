@@ -1,7 +1,6 @@
 package com.cricket.info.controller;
 
 import com.cricket.info.exceptions.UserNotCreatedException;
-import com.cricket.info.exceptions.UserNotFoundException;
 import com.cricket.info.models.UserModel;
 import com.cricket.info.services.UserService;
 import com.cricket.info.validators.UserInfoValidator;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -56,28 +56,20 @@ public class HomePageController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage(Model model){
-        model.addAttribute("user", new UserModel());
-        return "login";  // login.html
+    public String getLoginPage(Model model, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout){
+       if(error != null){
+           model.addAttribute("error","Invalid username OR password");
+       }
+       if(logout != null){
+           model.addAttribute("success", "You have been logged out successfully");
+       }
+
+       return "login";
     }
 
-    @PostMapping("/user/auth")
-    public String loginUser(Model model, @ModelAttribute UserModel userModel){
-
-        try {
-            userService.loginUser(userModel.getUsername(), userModel.getPassword());
-            model.addAttribute("success", "User with username " + userModel.getUsername() + " logged in successfully");
-        }catch (UserNotFoundException ex){
-            model.addAttribute("error", ex.getMessage());
-            model.addAttribute("user", new UserModel());
-            return "login";
-        }
-        return "home";
-    }
-
-    @GetMapping("/logout")
-    public String logoutUser(){
-        return "redirect:/login";
+    @GetMapping("/access-denied")
+    public String accessDenied(){
+        return "access-denied";
     }
 }
 

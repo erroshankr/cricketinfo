@@ -88,7 +88,14 @@
 
 <!-- Logout Button -->
 <div class="logout-btn">
-    <a th:href="@{/logout}">🚪 Logout</a>
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit"
+                style="background-color:#e74c3c; padding:10px 20px; color:white;
+                       border:none; font-size:14px; border-radius:6px; cursor:pointer;
+                       font-weight:bold;">
+            Logout
+        </button>
+    </form>
 </div>
 
 <div class="container">

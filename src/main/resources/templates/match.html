@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Match Management | Cricket Info App</title>
 
@@ -172,7 +172,14 @@
 </head>
 <body>
 <div class="logout-btn">
-    <a th:href="@{/logout}">🚪 Logout</a>
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit"
+                style="background-color:#e74c3c; padding:10px 20px; color:white;
+                       border:none; font-size:14px; border-radius:6px; cursor:pointer;
+                       font-weight:bold;">
+            Logout
+        </button>
+    </form>
 </div>
 <!-- Header -->
 <div class="header">
@@ -186,9 +193,11 @@
     <!-- Title + Button -->
     <div class="page-title">
         <h2>Match Management</h2>
+        <div sec:authorize="hasAnyRole('MATCH-ADMIN', 'ADMIN')">
         <a th:href="@{/match/new}" class="btn">
             <i class="fa fa-plus"></i> Add Match
         </a>
+        </div>
     </div>
 
     <!-- Messages -->

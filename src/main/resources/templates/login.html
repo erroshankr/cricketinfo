@@ -127,18 +127,17 @@
 
     <h2>🔐 Login User</h2>
 
-    <form th:action="@{/user/auth}"
-          th:object="${user}"
+    <form th:action="@{/login}"
           method="post">
 
         <div class="form-row">
             <label>Username</label>
-            <input type="text" th:field="*{username}">
+            <input type="text" name="username">
         </div>
 
         <div class="form-row">
             <label>Password</label>
-            <input type="password" th:field="*{password}">
+            <input type="password" name="password">
         </div>
 
         <button type="submit">Login</button>

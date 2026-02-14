@@ -4,12 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class UserModel extends BaseModel{
 
     @Column(unique = true)
     private String username;
+
+    @Column(nullable = false)
+    private String roles = "USER"; //default USER,TEAM_ADMIN
 
     private String password;
 
@@ -52,5 +58,17 @@ public class UserModel extends BaseModel{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String role) {
+        this.roles = role;
+    }
+
+    public List<String> getRoleList(){
+        return Arrays.asList(roles.split(","));
     }
 }

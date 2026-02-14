@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Player Management | Cricket Info App</title>
 
@@ -168,7 +168,14 @@
 </head>
 <body>
 <div class="logout-btn">
-    <a th:href="@{/logout}">🚪 Logout</a>
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <button type="submit"
+                style="background-color:#e74c3c; padding:10px 20px; color:white;
+                       border:none; font-size:14px; border-radius:6px; cursor:pointer;
+                       font-weight:bold;">
+            Logout
+        </button>
+    </form>
 </div>
 <!-- Header -->
 <div class="header">
@@ -182,9 +189,11 @@
     <!-- Page Title -->
     <div class="page-title">
         <h2>Player Management</h2>
+        <div sec:authorize="hasAnyRole('PLAYER-ADMIN', 'ADMIN')">
         <a th:href="@{/player/new}" class="btn">
             <i class="fa fa-plus"></i> Add Player
         </a>
+        </div>
     </div>
 
     <!-- Messages -->
