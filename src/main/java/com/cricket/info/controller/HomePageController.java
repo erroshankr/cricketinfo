@@ -34,7 +34,7 @@ public class HomePageController {
         return "signup";  // signup.html
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/user-create")
     public String registerUser(Model model, @ModelAttribute UserModel userModel){
         List<String> errors =  userInfoValidator.validate(userModel);
         if(!errors.isEmpty()) {

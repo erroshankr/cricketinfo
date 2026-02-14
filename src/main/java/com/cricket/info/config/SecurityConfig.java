@@ -16,7 +16,7 @@ public class SecurityConfig { // this is the core of integration
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
        http
                .authorizeHttpRequests(auth -> auth
-                       .requestMatchers("/login", "/register","/css/**","/js/**").permitAll()
+                       .requestMatchers("/login", "/register","/user-create","/css/**","/js/**").permitAll()
                        .requestMatchers("/team/**").hasAnyRole("TEAM-ADMIN","SUPER-ADMIN")
                        .requestMatchers("/player/**").hasAnyRole("PLAYER-ADMIN","SUPER-ADMIN")
                        .requestMatchers("/match/**").hasAnyRole("MATCH-ADMIN","SUPER-ADMIN")
