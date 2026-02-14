@@ -1,4 +1,4 @@
-package com.cricket.info.config;
+package com.cricket.info.auth;
 
 import com.cricket.info.enums.Role;
 import org.springframework.context.annotation.Bean;

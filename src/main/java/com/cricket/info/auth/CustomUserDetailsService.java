@@ -1,4 +1,4 @@
-package com.cricket.info.services.impl;
+package com.cricket.info.auth;
 
 import com.cricket.info.models.UserModel;
 import com.cricket.info.repo.UserRepository;
