@@ -12,14 +12,38 @@
             color: white;
         }
 
+        /* Logout Button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .logout-btn a {
+            background-color: #e74c3c;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .logout-btn a:hover {
+            background-color: #c0392b;
+            transform: scale(1.08);
+        }
+
         .container {
             text-align: center;
-            margin-top: 120px;
+            margin-top: 140px;
+            padding: 40px;
         }
 
         h1 {
             font-size: 42px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         p {
@@ -43,6 +67,7 @@
             font-size: 16px;
             border-radius: 6px;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         .btn:hover {
@@ -55,9 +80,16 @@
             font-size: 14px;
             opacity: 0.8;
         }
+
+
     </style>
 </head>
 <body>
+
+<!-- Logout Button -->
+<div class="logout-btn">
+    <a th:href="@{/logout}">🚪 Logout</a>
+</div>
 
 <div class="container">
 
@@ -66,8 +98,8 @@
     <p>
         Welcome to the Cricket Info Application.
         Manage teams, players, and matches all in one place.
-        This system helps you store cricket statistics, player details, team records,
-        and match information efficiently.
+        This system helps you store cricket statistics, player details,
+        team records, and match information efficiently.
     </p>
 
     <div class="btn-group">

@@ -71,10 +71,58 @@
             color: #3498db;
             font-weight: bold;
         }
+        /* Logout Button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .logout-btn a {
+            background-color: #e74c3c;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .logout-btn a:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-
+<div class="logout-btn">
+    <a th:href="@{/logout}">🚪 Logout</a>
+</div>
+<!-- Header -->
+<div class="header">
+    <h1>🏏 Cricket Info App</h1>
+    <a th:href="@{/}">Home</a>
+</div>
 <div class="container">
 
     <h2>Create Player</h2>

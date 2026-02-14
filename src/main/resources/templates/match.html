@@ -147,10 +147,33 @@
             background: #f8d7da;
             color: #721c24;
         }
+        /* Logout Button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .logout-btn a {
+            background-color: #e74c3c;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .logout-btn a:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
-
+<div class="logout-btn">
+    <a th:href="@{/logout}">🚪 Logout</a>
+</div>
 <!-- Header -->
 <div class="header">
     <h1>🏏 Cricket Info App</h1>
